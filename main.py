@@ -1,7 +1,6 @@
 # coding: utf-8
 
 from apeiron import graphics
-
 from apeiron.state import State
 from apeiron.context import ContextBuilder
 

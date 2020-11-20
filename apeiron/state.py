@@ -1,5 +1,10 @@
 # coding: utf-8
 
+functions = [
+    'draw', 'update', 'on_start',
+    'on_stop', 'on_pause', 'on_resume'
+]
+
 class State:
     def __init__(self, ctx):
         self.ctx = ctx
@@ -8,7 +13,7 @@ class State:
         return self.__class__.__name__
 
     def __getattr__(self, name):
-        if name in ['on_start', 'on_stop', 'on_pause', 'on_resume']:
+        if name in functions:
             return lambda *a, **k: None
 
         raise AttributeError(name)
@@ -24,16 +29,6 @@ class StateManager:
         except IndexError:
             return None
 
-    def push(self, state):
-        if not isinstance(state, State):
-            raise Exception('`state` must be an instance of `State`')
-
-        if self.state:
-            self.state.on_pause()
-
-        self.states.append(state)
-        self.state.on_start()
-
     def pop(self):
         if not self.state:
             raise Exception('state stack is empty')
@@ -44,13 +39,23 @@ class StateManager:
         if self.state:
             self.state.on_resume()
 
-    def set_state(self, state):
+    def set(self, state):
         if not isinstance(state, State):
             raise Exception('`state` must be an instance of `State`')
 
         if self.state:
             self.state.on_stop()
             self.states.pop()
+
+        self.states.append(state)
+        self.state.on_start()
+
+    def push(self, state):
+        if not isinstance(state, State):
+            raise Exception('`state` must be an instance of `State`')
+
+        if self.state:
+            self.state.on_pause()
 
         self.states.append(state)
         self.state.on_start()

@@ -41,20 +41,20 @@ class Context:
             event_name = pygame.event.event_name(event.type).lower()
             transition = call_func(self.state_manager.state, f'handle_{event_name}_event', event)
  
-            if transition == trans.POP:
-                self.state_manager.pop()
-            elif transition == trans.SET:
-                self.state_manager.set_state(transition.state(self))
-            elif transition == trans.PUSH:
-                self.state_manager.push(transition.state(self))
+            if transition:
+                {
+                    'POP' : lambda state: self.state_manager.pop(),
+                    'SET' : lambda state: self.state_manager.set(state(self)),
+                    'PUSH': lambda state: self.state_manager.push(state(self))
+                }.get(transition.trans, lambda s: None)(transition.state)
 
     def run(self, initial_state):
         self.state_manager.push(initial_state(self))
 
         while self.state_manager.state:
             self.handle_events()
-            call_func(self.state_manager.state, 'draw')
-            self.clock.tick(60)
+            self.state_manager.state.draw()
+            self.clock.tick()
             pygame.display.flip()
 
         exit(pygame.quit() or 0)

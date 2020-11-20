@@ -8,29 +8,18 @@ from apeiron.state import State
 from apeiron.context import ContextBuilder
 
 class PausedState(State):
-    def on_start(self):
-        print('started', self)
-
-    def on_stop(self):
-        print('stopped', self)
-
     def handle_keydown_event(self, event):
         return {
             pygame.K_ESCAPE: trans.POP(),
         }.get(event.key, trans.NONE())
 
-    def update(self):
-        pass
-
     def draw(self):
         graphics.clear(self.ctx, (255, 255, 255))
+        pygame.draw.rect(self.ctx.screen, (0, 0, 0), self.ctx.rect)
 
 class MainState(State):
     def on_start(self):
-        print('started', self)
-
-    def on_stop(self):
-        print('stopped', self)
+        self.ctx.rect = pygame.Rect(0, 200, 10, 10)
 
     def handle_keydown_event(self, event):
         return {
@@ -40,16 +29,17 @@ class MainState(State):
         }.get(event.key, trans.NONE())
 
     def update(self):
-        pass
+        self.ctx.rect.move_ip(1, 0)
 
     def draw(self):
         graphics.clear(self.ctx, (0, 0, 0))
+        pygame.draw.rect(self.ctx.screen, (255, 255, 255), self.ctx.rect)
 
 if __name__ == '__main__':
     ContextBuilder('test', 400, 400) \
         .icon(pygame.Surface((1, 1))) \
         .grab_mouse(False) \
         .resizable(True) \
-        .fps(60) \
+        .fps(75) \
         .build() \
         .run(MainState)

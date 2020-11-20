@@ -54,6 +54,7 @@ class Context:
         while self.state_manager.state:
             self.handle_events()
             call_func(self.state_manager.state, 'draw')
+            call_func(self.state_manager.state, 'update')
             self.clock.tick(self.config['fps'])
             pygame.display.flip()
 

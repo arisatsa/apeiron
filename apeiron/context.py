@@ -54,7 +54,7 @@ class Context:
         while self.state_manager.state:
             self.handle_events()
             self.state_manager.state.draw()
-            self.clock.tick()
+            self.clock.tick(self.config['fps'])
             pygame.display.flip()
 
         exit(pygame.quit() or 0)
@@ -62,6 +62,7 @@ class Context:
 class ContextBuilder:
     def __init__(self, title, width, height):
         self.config = {
+            'fps'       : 0,
             'icon'      : None,
             'title'     : title,
             'size'      : (width, height),

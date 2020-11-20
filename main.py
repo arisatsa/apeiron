@@ -50,5 +50,6 @@ if __name__ == '__main__':
         .icon(pygame.Surface((1, 1))) \
         .grab_mouse(False) \
         .resizable(True) \
+        .fps(60) \
         .build() \
         .run(MainState)

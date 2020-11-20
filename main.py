@@ -2,10 +2,9 @@
 
 import pygame
 
-from apeiron import trans
-from apeiron import graphics
-from apeiron.state import State
-from apeiron.context import ContextBuilder
+from apeiron import (
+    draw, trans,
+    State, ContextBuilder)
 
 class PausedState(State):
     def handle_keydown_event(self, event):
@@ -14,7 +13,7 @@ class PausedState(State):
         }.get(event.key, trans.NONE())
 
     def draw(self):
-        graphics.clear(self.ctx, (255, 255, 255))
+        draw.clear(self.ctx, (255, 255, 255))
         pygame.draw.rect(self.ctx.screen, (0, 0, 0), self.ctx.rect)
 
 class MainState(State):
@@ -32,7 +31,7 @@ class MainState(State):
         self.ctx.rect.move_ip(1, 0)
 
     def draw(self):
-        graphics.clear(self.ctx, (0, 0, 0))
+        draw.clear(self.ctx, (0, 0, 0))
         pygame.draw.rect(self.ctx.screen, (255, 255, 255), self.ctx.rect)
 
 if __name__ == '__main__':

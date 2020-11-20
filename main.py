@@ -2,10 +2,10 @@
 
 import pygame
 
+from apeiron import trans
 from apeiron import graphics
 from apeiron.state import State
 from apeiron.context import ContextBuilder
-from apeiron.transitions import Transition as Trans
 
 class PausedState(State):
     def on_start(self):
@@ -16,8 +16,8 @@ class PausedState(State):
 
     def handle_keydown_event(self, event):
         return {
-            pygame.K_ESCAPE: (Trans.POP, None),
-        }.get(event.key, (Trans.NONE, None))
+            pygame.K_ESCAPE: trans.POP(),
+        }.get(event.key, trans.NONE())
 
     def update(self):
         pass
@@ -34,10 +34,10 @@ class MainState(State):
 
     def handle_keydown_event(self, event):
         return {
-            pygame.K_ESCAPE: ( Trans.POP, None),
-            pygame.K_s     : ( Trans.SET, PausedState),
-            pygame.K_p     : (Trans.PUSH, PausedState)
-        }.get(event.key, (Trans.NONE, None))
+            pygame.K_ESCAPE: trans.POP(),
+            pygame.K_s     : trans.SET(PausedState),
+            pygame.K_p     : trans.PUSH(PausedState)
+        }.get(event.key, trans.NONE())
 
     def update(self):
         pass

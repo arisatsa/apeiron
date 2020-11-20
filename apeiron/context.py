@@ -2,9 +2,9 @@
 
 import pygame
 
+from . import trans
 from .utils import call_func
 from .state import State, StateManager
-from .transitions import Transition as Trans
 
 class Context:
     def __init__(self, **config):
@@ -33,17 +33,17 @@ class Context:
 
                 exit(pygame.quit() or 0)
 
-            if self.state_manager.state:
-                event_name = pygame.event.event_name(event.type).lower()
-                transition = call_func(self.state_manager.state, f'handle_{event_name}_event', event)
+            # fck this i need python 3.10!!
 
-                if transition:
-                    state = transition[1](self) if transition[1] else None
-                    {
-                        Trans.SET : lambda s: self.state_manager.set_state(s),
-                        Trans.POP : lambda s: self.state_manager.pop(),
-                        Trans.PUSH: lambda s: self.state_manager.push(s)
-                    }.get(transition[0], lambda s: None)(state)
+            event_name = pygame.event.event_name(event.type).lower()
+            transition = call_func(self.state_manager.state, f'handle_{event_name}_event', event)
+ 
+            if transition == trans.POP:
+                self.state_manager.pop()
+            elif transition == trans.SET:
+                self.state_manager.set_state(transition.state(self))
+            elif transition == trans.PUSH:
+                self.state_manager.push(transition.state(self))
 
     def run(self, initial_state):
         # TODO: ????
@@ -68,8 +68,7 @@ class ContextBuilder:
             'resizable' : False,
             'fullscreen': False,
             'show_mouse': True,
-            'grab_mouse': False
-        }
+            'grab_mouse': False}
 
     def __str__(self):
         return str(self.config)

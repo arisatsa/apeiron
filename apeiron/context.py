@@ -25,6 +25,9 @@ class Context:
                       pygame.FULLSCREEN * self.config['fullscreen']
         self.screen = pygame.display.set_mode(self.config['size'], self.flags)
 
+        if self.config['icon']:
+            pygame.display.set_icon(self.config['icon'])
+
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -46,13 +49,10 @@ class Context:
                 self.state_manager.push(transition.state(self))
 
     def run(self, initial_state):
-        # TODO: ????
-
         self.state_manager.push(initial_state(self))
 
-        while True and self.state_manager.state:
+        while self.state_manager.state:
             self.handle_events()
-            call_func(self.state_manager.state, 'update')
             call_func(self.state_manager.state, 'draw')
             self.clock.tick(60)
             pygame.display.flip()
@@ -62,6 +62,7 @@ class Context:
 class ContextBuilder:
     def __init__(self, title, width, height):
         self.config = {
+            'icon'      : None,
             'title'     : title,
             'size'      : (width, height),
             'vsync'     : False,

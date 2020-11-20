@@ -47,9 +47,8 @@ class MainState(State):
 
 if __name__ == '__main__':
     ContextBuilder('test', 400, 400) \
-        .vsync(True) \
+        .icon(pygame.Surface((1, 1))) \
         .grab_mouse(False) \
-        .show_mouse(False) \
         .resizable(True) \
         .build() \
         .run(MainState)

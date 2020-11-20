@@ -3,8 +3,11 @@
 import pygame
 
 from . import trans
-from .utils import call_func
 from .state import State, StateManager
+
+def call_func(obj, name, *a, **k):
+    if obj:
+        return getattr(obj, name, lambda *a, **k: None)(*a, **k)
 
 class Context:
     def __init__(self, **config):
@@ -35,8 +38,6 @@ class Context:
                     self.state_manager.pop()
 
                 exit(pygame.quit() or 0)
-
-            # fck this i need python 3.10!!
 
             event_name = pygame.event.event_name(event.type).lower()
             transition = call_func(self.state_manager.state, f'handle_{event_name}_event', event)
@@ -71,7 +72,8 @@ class ContextBuilder:
             'resizable' : False,
             'fullscreen': False,
             'show_mouse': True,
-            'grab_mouse': False}
+            'grab_mouse': False
+        }
 
     def __str__(self):
         return str(self.config)

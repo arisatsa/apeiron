@@ -14,7 +14,7 @@ class PausedState(State):
 
     def draw(self):
         draw.clear(self.ctx, (255, 255, 255))
-        pygame.draw.rect(self.ctx.screen, (0, 0, 0), self.ctx.rect)
+        draw.rect(self.ctx, (0, 0, 0), self.ctx.rect)
 
 class MainState(State):
     def on_start(self):
@@ -32,7 +32,7 @@ class MainState(State):
 
     def draw(self):
         draw.clear(self.ctx, (0, 0, 0))
-        pygame.draw.rect(self.ctx.screen, (255, 255, 255), self.ctx.rect)
+        draw.rect(self.ctx, (255, 255, 255), self.ctx.rect)
 
 if __name__ == '__main__':
     ContextBuilder('test', 400, 400) \

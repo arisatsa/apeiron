@@ -8,9 +8,10 @@ from apeiron import (
 
 class PausedState(State):
     def handle_keydown_event(self, event):
-        return {
-            pygame.K_ESCAPE: trans.POP(),
-        }.get(event.key, trans.NONE())
+        if event.key == pygame.K_p:
+            return trans.POP()
+
+        return trans.POP()
 
     def draw(self):
         draw.clear(self.ctx, (255, 255, 255))
@@ -18,17 +19,20 @@ class PausedState(State):
 
 class MainState(State):
     def on_start(self):
-        self.ctx.rect = pygame.Rect(0, 200, 10, 10)
+        self.ctx.rect = pygame.Rect(0, 0, 10, 10)
 
     def handle_keydown_event(self, event):
         return {
-            pygame.K_ESCAPE: trans.POP(),
+            pygame.K_p     : trans.PUSH(PausedState),
             pygame.K_s     : trans.SET(PausedState),
-            pygame.K_p     : trans.PUSH(PausedState)
+            pygame.K_ESCAPE: trans.POP()
         }.get(event.key, trans.NONE())
 
     def update(self):
-        self.ctx.rect.move_ip(1, 0)
+        if self.ctx.rect.x > self.ctx.config['size'][0]:
+            self.ctx.rect.move_ip(-400, -400)
+
+        self.ctx.rect.move_ip(1, 1)
 
     def draw(self):
         draw.clear(self.ctx, (0, 0, 0))

@@ -11,7 +11,7 @@ class PausedState(State):
         if event.key == pygame.K_p:
             return trans.POP()
 
-        return trans.POP()
+        return trans.NONE()
 
     def draw(self):
         draw.clear(self.ctx, (255, 255, 255))

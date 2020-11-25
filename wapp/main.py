@@ -11,8 +11,8 @@ from apeiron import (
 
 class PausedState(State):
     def handle_keydown_event(self, event):
-        self.ctx.pause.stop()
         if event.key == pygame.K_p:
+            self.ctx.pause.stop()
             self.ctx.resume.play()
             return trans.POP()
 
@@ -29,8 +29,8 @@ class MainState(State):
         self.ctx.resume = pygame.mixer.Sound('resources/resume.mp3')
 
     def handle_keydown_event(self, event):
-        self.ctx.resume.stop()
         if event.key == pygame.K_p:
+            self.ctx.resume.stop()
             self.ctx.pause.play()
 
         return {

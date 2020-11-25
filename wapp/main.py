@@ -5,6 +5,7 @@ import pygame
 
 sys.path.append('..')
 
+from random import randint
 from apeiron import (
     draw, trans,
     State, ContextBuilder)
@@ -40,20 +41,26 @@ class MainState(State):
         }.get(event.key, trans.NONE())
 
     def update(self):
-        if self.ctx.rect.x > self.ctx.config['size'][0]:
-            self.ctx.rect.move_ip(-400, -400)
+        rect = self.ctx.rect
+        size = self.ctx.config['size']
 
-        self.ctx.rect.move_ip(1, 1)
+        if not (0 <= rect.x < size[0]):
+            rect.x = max(0, size[0], key=lambda x: abs(rect.x - x))
+
+        if not (0 <= rect.y < size[1]):
+            rect.y = max(0, size[1], key=lambda y: abs(rect.y - y))
+
+        rect.move_ip(randint(-10, 10), randint(-10, 10))
 
     def draw(self):
         draw.clear(self.ctx, (0, 0, 0))
         draw.rect(self.ctx, (255, 255, 255), self.ctx.rect)
 
 if __name__ == '__main__':
-    ContextBuilder('test', 400, 400) \
+    ContextBuilder('test', 200, 200) \
         .icon(pygame.Surface((1, 1))) \
         .grab_mouse(False) \
-        .resizable(True) \
+        .resizable(False) \
         .fps(75) \
         .build() \
         .run(MainState)

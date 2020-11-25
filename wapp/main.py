@@ -12,7 +12,6 @@ from apeiron import (
 class PausedState(State):
     def handle_keydown_event(self, event):
         self.ctx.pause.stop()
-
         if event.key == pygame.K_p:
             self.ctx.resume.play()
             return trans.POP()
@@ -31,18 +30,14 @@ class MainState(State):
 
     def handle_keydown_event(self, event):
         self.ctx.resume.stop()
-
         if event.key == pygame.K_p:
             self.ctx.pause.play()
-            return trans.PUSH(PausedState)
 
-        elif event.key == pygame.K_s:
-            return trans.SET(PausedState)
-        
-        elif event.key == pygame.K_ESCAPE:
-            return trans.POP()
-
-        return trans.NONE()
+        return {
+            pygame.K_p     : trans.PUSH(PausedState),
+            pygame.K_s     : trans.SET(PausedState),
+            pygame.K_ESCAPE: trans.POP()
+        }.get(event.key, trans.NONE())
 
     def update(self):
         if self.ctx.rect.x > self.ctx.config['size'][0]:

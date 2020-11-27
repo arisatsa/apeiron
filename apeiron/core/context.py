@@ -9,6 +9,29 @@ def call_func(obj, name, *a, **k):
     if obj:
         return getattr(obj, name, lambda *a, **k: None)(*a, **k)
 
+class ContextBuilder:
+    def __init__(self, title, width, height):
+        self.config = {
+            'fps'       : 0,
+            'icon'      : None,
+            'show_mouse': True,
+            'title'     : title,
+            'vsync'     : False,
+            'resizable' : False,
+            'fullscreen': False,
+            'grab_mouse': False,
+            'size'      : (width, height)}
+
+    def __str__(self):
+        return str(self.config)
+
+    def __getattr__(self, name): # poggers?
+        if name in self.config.keys():
+            return lambda d: self.config.update({name: d}) or self
+
+    def build(self):
+        return Context(**self.config)
+
 class Context:
     def __init__(self, **config):
         self.config = config
@@ -60,27 +83,3 @@ class Context:
             pygame.display.flip()
 
         exit(pygame.quit() or 0)
-
-class ContextBuilder:
-    def __init__(self, title, width, height):
-        self.config = {
-            'fps'       : 0,
-            'icon'      : None,
-            'title'     : title,
-            'size'      : (width, height),
-            'vsync'     : False,
-            'resizable' : False,
-            'fullscreen': False,
-            'show_mouse': True,
-            'grab_mouse': False
-        }
-
-    def __str__(self):
-        return str(self.config)
-
-    def __getattr__(self, name): # poggers?
-        if name in self.config.keys():
-            return lambda d: self.config.update({name: d}) or self
-
-    def build(self):
-        return Context(**self.config)

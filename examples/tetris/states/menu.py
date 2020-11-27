@@ -15,4 +15,4 @@ class Menu(State):
         return trans.SET(states.GameState)
 
     def draw(self):
-        draw.clear(self.ctx, (255, 255, 255))
+        draw.clear(self.ctx, (255, 255 * (not getattr(self.ctx, 'paused', 0)), 255))

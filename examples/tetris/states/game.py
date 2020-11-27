@@ -38,9 +38,11 @@ class Game(State):
 
     def on_pause(self):
         self.on_stop()
+        self.ctx.paused = True
 
     def on_resume(self):
         pygame.time.set_timer(*bevent)
+        self.ctx.paused = False
 
     def handle_quit_event(self, event):
         pygame.quit(); exit(0)
@@ -81,6 +83,9 @@ class Game(State):
         if event.key == pygame.K_SPACE:
             self.ctx.board.hard_drop()
 
+        elif event.key == pygame.K_p:
+            return trans.PUSH(states.MenuState)
+
         elif event.key in [pygame.K_z, pygame.K_x, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
             shape, dx, dy = {
                 pygame.K_z    : (shape.rotate( 1),  0, 0),
@@ -95,16 +100,9 @@ class Game(State):
             if event.key not in [pygame.K_z, pygame.K_x]:
                 Timer(5 / kevent[1], pygame.time.set_timer, kevent).start()
 
-    def draw_next_shape(self):
-        pass
+    def draw(self):
+        draw.clear(self.ctx, (238, 238, 238))
 
-    def draw_score(self):
-        draw.rect(self.ctx, (0, 0, 0), (430, 20, 140, 30), 3)
-        self.ctx.mfont.render_to(
-            self.ctx.screen, (465, 31),
-            f'Score: {self.ctx.board.score}', (0, 0, 0))
-
-    def draw_board(self):
         for (x, y) in self.ctx.board.shape.coords:
             draw.rect(
                 self.ctx,
@@ -127,10 +125,7 @@ class Game(State):
                     self.block.move(x * self.block.width, y * self.block.height), 1)
 
         draw.rect(self.ctx, (0, 0, 0), (200, 20, 200, 480), 3)
-
-    def draw(self):
-        draw.clear(self.ctx, (238, 238, 238))
-
-        self.draw_board()
-        self.draw_score()
-        self.draw_next_shape()
+        draw.rect(self.ctx, (0, 0, 0), (430, 20, 140, 30), 3)
+        self.ctx.mfont.render_to(
+            self.ctx.screen, (465, 31),
+            f'Score: {self.ctx.board.score}', (0, 0, 0))

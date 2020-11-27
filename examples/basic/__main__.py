@@ -1,9 +1,7 @@
 # coding: utf-8
 
-import pygame
-
 from apeiron import (
-    draw, trans,
+    draw, trans, pygame,
     State, ContextBuilder)
 
 class PausedState(State):

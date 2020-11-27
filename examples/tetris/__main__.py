@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from .states import MainState
+from .states import MenuState
 from apeiron import ContextBuilder
 
 if __name__ == "__main__":
@@ -9,4 +9,4 @@ if __name__ == "__main__":
         .resizable(False) \
         .fps(75) \
         .build() \
-        .run(MainState)
+        .run(MenuState)

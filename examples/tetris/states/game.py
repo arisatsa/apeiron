@@ -1,9 +1,5 @@
 # coding: utf-8
 
-from tetris import states
-from tetris.logic import Shape
-from tetris.logic import Board
-
 from threading import Timer
 from apeiron import (
     draw, trans,
@@ -11,17 +7,22 @@ from apeiron import (
 
 import pygame.freetype
 
+from tetris import states
+from tetris.logic import Shape
+from tetris.logic import Board
+
 kevent = (pygame.event.custom_type(), 1000 // 15) #   key event
 bevent = (pygame.event.custom_type(), 1000 // 5 ) # board event
 
 colors = [
-    (  0,   0, 255),
-    (  0, 150,   0),
-    (255,   0,   0),
-    (255, 120,   0),
-    (255, 255,   0),
-    (  0, 220, 220),
-    (180,   0, 255)]
+    (240,   0,   3), # ZShape
+    (  1, 240,   0), # SShape
+    (158,   1, 239), # TShape
+    (240, 160,   1), # LShape
+    (  1, 216, 215), # LineShape
+    (  0,   0, 240), # SquareShape
+    (  0,   0, 240), # MirroredLShape
+]
 
 class Game(State):
     def on_start(self):
@@ -125,7 +126,7 @@ class Game(State):
                     self.block.move(x * self.block.width, y * self.block.height), 1)
 
         draw.rect(self.ctx, (0, 0, 0), (200, 20, 200, 480), 3)
-        draw.rect(self.ctx, (0, 0, 0), (430, 20, 140, 30), 3)
+        draw.rect(self.ctx, (0, 0, 0), (430, 20, 140,  30), 3)
         self.ctx.mfont.render_to(
             self.ctx.screen, (465, 31),
             f'Score: {self.ctx.board.score}', (0, 0, 0))

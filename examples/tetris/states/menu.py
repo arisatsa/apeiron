@@ -8,7 +8,7 @@ from tetris import states
 
 class Menu(State):
     def handle_keydown_event(self, event):
-        if event.key == pygame.K_ESCAPE:
+        if event.key in [pygame.K_p, pygame.K_ESCAPE]:
             return trans.POP()
 
     def handle_mousebuttondown_event(self, event):
